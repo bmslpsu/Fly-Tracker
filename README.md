@@ -1,2 +1,2 @@
 # Fly-Tracker
-Tracking computations for wings and head
+Tracking functions for wings and head
