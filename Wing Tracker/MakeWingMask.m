@@ -9,20 +9,20 @@ function [WingMask] = MakeWingMask(vid)
     ylim([0 dim(1)])
        
     rPts = [...
-        impoint(gca, dim(2)*0.7, dim(1)*0.1, 'PositionConstraintFcn', @(pos) rPositionConstraintFcn(pos, dim))...             % rTopRight
-        impoint(gca, dim(2)*0.7, dim(1)*0.9, 'PositionConstraintFcn', @(pos) rPositionConstraintFcn(pos, dim))...             % rBottomRight
-        impoint(gca, dim(2)*0.6, dim(1)*0.5)...                                                                               % rInnerCircle
-        impoint(gca, dim(2)*0.55, dim(1)*0.5, 'PositionConstraintFcn', @(pos) rPositionConstraintFcn(pos, dim))];              % rCenter
+        impoint(gca, dim(2)*0.7, dim(1)*0.1, 'PositionConstraintFcn', @(pos) rPositionConstraintFcn(pos, dim))... 	% rTopRight
+        impoint(gca, dim(2)*0.7, dim(1)*0.9, 'PositionConstraintFcn', @(pos) rPositionConstraintFcn(pos, dim))...  	% rBottomRight
+        impoint(gca, dim(2)*0.6, dim(1)*0.5)...                                                                    	% rInnerCircle
+        impoint(gca, dim(2)*0.55, dim(1)*0.5, 'PositionConstraintFcn', @(pos) rPositionConstraintFcn(pos, dim))]; 	% rCenter
     setPositionConstraintFcn(rPts(3), @(pos) rInnerCircleConstraintFcn(pos, dim, rPts));
     for i = 1:4
         setColor(rPts(i), 'r');
     end
     
     lPts = [...
-        impoint(gca, dim(2)*0.3, dim(1)*0.1, 'PositionConstraintFcn', @(pos) lPositionConstraintFcn(pos, dim))...             % lTopLeft
-        impoint(gca, dim(2)*0.3, dim(1)*0.9, 'PositionConstraintFcn', @(pos) lPositionConstraintFcn(pos, dim))...             % lBottomLeft
-        impoint(gca, dim(2)*0.4, dim(1)*0.5)...                                                                               % lInnterCircle
-        impoint(gca, dim(2)*0.45, dim(1)*0.5, 'PositionConstraintFcn', @(pos) lPositionConstraintFcn(pos, dim))];              % lCenter
+        impoint(gca, dim(2)*0.3, dim(1)*0.1, 'PositionConstraintFcn', @(pos) lPositionConstraintFcn(pos, dim))... 	% lTopLeft
+        impoint(gca, dim(2)*0.3, dim(1)*0.9, 'PositionConstraintFcn', @(pos) lPositionConstraintFcn(pos, dim))...  	% lBottomLeft
+        impoint(gca, dim(2)*0.4, dim(1)*0.5)...                                                                    	% lInnterCircle
+        impoint(gca, dim(2)*0.45, dim(1)*0.5, 'PositionConstraintFcn', @(pos) lPositionConstraintFcn(pos, dim))];  	% lCenter
     setPositionConstraintFcn(lPts(3), @(pos) lInnerCircleConstraintFcn(pos, dim, lPts));
     for i = 1:4
         setColor(lPts(i), 'g');
