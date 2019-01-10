@@ -1,4 +1,4 @@
-function [lCenterPos, rCenterPos, lMask, rMask,rtop, rbot, ltop, lbot] = MakeWingMask(vid)
+function [WingMask] = MakeWingMask(vid)
 % MakeWingMask:
 
     dim = size(vid);
@@ -79,15 +79,19 @@ function [lCenterPos, rCenterPos, lMask, rMask,rtop, rbot, ltop, lbot] = MakeWin
     end
     btnDone.Value = 0;
     
-    rCenterPos = getPosition(rPts(4));
-    lCenterPos = getPosition(lPts(4));
-    rMask = rMaskPts(rPts);
-    lMask = lMaskPts(lPts);
-    rtop = getPosition(rPts(1));
-    rbot = getPosition(rPts(2));
-    ltop = getPosition(lPts(1));
-    lbot = getPosition(lPts(2));
+    % Make strcture containing mask points
+    WingMask.R.center   = getPosition(rPts(4));
+    WingMask.L.center   = getPosition(lPts(4));
     
+    WingMask.R.points   = rMaskPts(rPts);
+    WingMask.L.points   = lMaskPts(lPts);
+    
+    WingMask.R.top      = getPosition(rPts(1));
+ 	WingMask.L.top   	= getPosition(lPts(1));
+
+    WingMask.R.bot      = getPosition(rPts(2));
+    WingMask.L.bot    	= getPosition(lPts(2));
+
 end
 %% Function for correcting angles for the left side when they're below the horizontal
 function angle = correctLeftAngle(angle)
