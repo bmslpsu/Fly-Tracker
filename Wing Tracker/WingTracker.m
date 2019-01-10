@@ -1,18 +1,25 @@
-function [Wing] = WingTracker(vidData,debug)
+function [Wing] = WingTracker(vid,debug,varargin)
 % WingTracker: tracks wings in rigid teher
     % Inputs:
         % vidData: 4D video matrix
         % debug: 
+        % Mask: 
     % Outputs:
-        % WingAngles: structure containing L & R wing angles and mask points
-        % debug:
+        % Wing: structure containing time, L & R wing angles and mask points
+        
 %% Area Tracking %%
 %---------------------------------------------------------------------------------------------------------------------------------
 % Make Mask
-Vid = squeeze(vidData);     % get rid of singleton dimension
-[~,~,nFrame] = size(Vid);   % get elevant video dimesnions
+Vid = squeeze(vid);         % get rid of singleton dimension
+[~,~,nFrame] = size(Vid);   % get relevant video dimensions
 
-Mask = MakeWingMask(vidData); % make mask for wings
+if nargin==2
+    Mask = MakeWingMask(vid); % make mask for wings
+elseif (nargin>=4) || (nargin<=1)
+    error('Too many input arguments')
+else
+   Mask = varargin{1};
+end
 
 Wing.Mask  = Mask; % store mask
 
@@ -22,6 +29,8 @@ rPoly = impoly(gca, Mask.R.points);
 lPoly = impoly(gca, Mask.L.points);
 rMask = createMask(rPoly);
 lMask = createMask(lPoly);
+pause
+close
 
 % Find angular range
 rlow  = atan2d      ( Mask.R.bot(2) - Mask.R.center(2) , Mask.R.bot(1) - Mask.R.center(1) );
@@ -62,15 +71,15 @@ for kk = 1:nFrame
     Wing.Angle.L(kk) = calculateAngle(Frame, lMask, lrange, llow);
     
     if debug
-     figure (2)
+     figure (1)
      imshow(IMG{8})
      hold on
-     h.Left  = animatedline('Color','g','LineWidth',2);
-     h.Right = animatedline('Color','r','LineWidth',2);
-     addpoints(h.Left , Mask.L.center(1),Mask.L.center(2));
-     addpoints(h.Right, Mask.R.center(1),Mask.R.center(2));
-     addpoints(h.Left , Mask.L.center(1)-100,Mask.L.center(2)-tand(Wing.Angle.L(kk))*100);
-     addpoints(h.Right, Mask.R.center(1)+100,Mask.R.center(2)+tand(Wing.Angle.R(kk))*100);
+     h.L = animatedline('Color','g','LineWidth',2);
+     h.R = animatedline('Color','r','LineWidth',2);
+     addpoints(h.L , Mask.L.center(1),Mask.L.center(2));
+     addpoints(h.R , Mask.R.center(1),Mask.R.center(2));
+     addpoints(h.L , Mask.L.center(1)-100,Mask.L.center(2)-tand(Wing.Angle.L(kk))*100);
+     addpoints(h.R , Mask.R.center(1)+100,Mask.R.center(2)+tand(Wing.Angle.R(kk))*100);
     end
 end
 toc
@@ -79,14 +88,14 @@ end
 %% Internal Function Definitions %%
 %---------------------------------------------------------------------------------------------------------------------------------
  function angle = calculateAngle(frame, mask, range, low)
-    val = frame(mask);
+    val    = frame(mask);
     val_up = val(val==1);
-    angle = low+range*length(val_up)/length(val);
+    angle  = low + range*length(val_up)/length(val);
  end
  
  function angle = atan2d_adv(y,x)
     angle = atan2d(y,x);
     if angle < 0
-        angle = angle+360;
+        angle = angle + 360;
     end
  end

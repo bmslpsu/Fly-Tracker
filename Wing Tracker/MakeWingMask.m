@@ -1,9 +1,9 @@
 function [WingMask] = MakeWingMask(vid)
 % MakeWingMask:
-
-    dim = size(vid);
+    Vid = squeeze(vid);
+    dim = size(Vid);
     figure
-    imagesc(vid(:,:,:,1));                                
+    imagesc(Vid(:,:,1));                                
     axis equal
     xlim([0 dim(2)])
     ylim([0 dim(1)])
@@ -11,17 +11,17 @@ function [WingMask] = MakeWingMask(vid)
     rPts = [...
         impoint(gca, dim(2)*0.7, dim(1)*0.1, 'PositionConstraintFcn', @(pos) rPositionConstraintFcn(pos, dim))... 	% rTopRight
         impoint(gca, dim(2)*0.7, dim(1)*0.9, 'PositionConstraintFcn', @(pos) rPositionConstraintFcn(pos, dim))...  	% rBottomRight
-        impoint(gca, dim(2)*0.6, dim(1)*0.5)...                                                                    	% rInnerCircle
-        impoint(gca, dim(2)*0.55, dim(1)*0.5, 'PositionConstraintFcn', @(pos) rPositionConstraintFcn(pos, dim))]; 	% rCenter
+        impoint(gca, dim(2)*0.6, dim(1)*0.5, 'PositionConstraintFcn', @(pos) rPositionConstraintFcn(pos, dim))...   % rInnerCircle
+        impoint(gca, dim(2)*0.55, dim(1)*0.5,'PositionConstraintFcn', @(pos) rPositionConstraintFcn(pos, dim))]; 	% rCenter
     setPositionConstraintFcn(rPts(3), @(pos) rInnerCircleConstraintFcn(pos, dim, rPts));
     for i = 1:4
         setColor(rPts(i), 'r');
     end
     
     lPts = [...
-        impoint(gca, dim(2)*0.3, dim(1)*0.1, 'PositionConstraintFcn', @(pos) lPositionConstraintFcn(pos, dim))... 	% lTopLeft
-        impoint(gca, dim(2)*0.3, dim(1)*0.9, 'PositionConstraintFcn', @(pos) lPositionConstraintFcn(pos, dim))...  	% lBottomLeft
-        impoint(gca, dim(2)*0.4, dim(1)*0.5)...                                                                    	% lInnterCircle
+        impoint(gca, dim(2)*0.3,  dim(1)*0.1, 'PositionConstraintFcn', @(pos) lPositionConstraintFcn(pos, dim))... 	% lTopLeft
+        impoint(gca, dim(2)*0.3,  dim(1)*0.9, 'PositionConstraintFcn', @(pos) lPositionConstraintFcn(pos, dim))...  % lBottomLeft
+        impoint(gca, dim(2)*0.4,  dim(1)*0.5, 'PositionConstraintFcn', @(pos) lPositionConstraintFcn(pos, dim))...  % lInnterCircle
         impoint(gca, dim(2)*0.45, dim(1)*0.5, 'PositionConstraintFcn', @(pos) lPositionConstraintFcn(pos, dim))];  	% lCenter
     setPositionConstraintFcn(lPts(3), @(pos) lInnerCircleConstraintFcn(pos, dim, lPts));
     for i = 1:4
@@ -254,7 +254,7 @@ function lCenterCallback(pos, lPts)
         delta = pos - lCenterOldPos;
 
         for i = 1:3
-            setConstrainedPosition(lPts(i), getPosition(lPts(i)) + delta);                                                  % Shift everything by how much the center moved
+            setConstrainedPosition(lPts(i), getPosition(lPts(i)) + delta);    % Shift everything by how much the center moved
         end
         redrawLeftGUI(lPts)
         lCenterOldPos = pos;
@@ -342,7 +342,7 @@ function rCenterCallback(pos, rPts)
         delta = pos - rCenterOldPos;
 
         for i = 1:3
-            setConstrainedPosition(rPts(i), getPosition(rPts(i)) + delta);      % Shift everything by how much the center moved
+            setConstrainedPosition(rPts(i), getPosition(rPts(i)) + delta); % Shift everything by how much the center moved
         end
         redrawRightGUI(rPts)
         rCenterOldPos = pos;
@@ -374,7 +374,7 @@ function newPos = rInnerCircleConstraintFcn(newPos, dim, rPts)
     
     midpt = midpoint(getPosition(rPts(1)), getPosition(rPts(2)));
     m = (midpt(2)-center(2))/(midpt(1)-center(1));
-    newPos(2) = m*(newPos(1)-center(1)) + center(2);                            % Basically using point-slope formula to keep the point on line
+    newPos(2) = m*(newPos(1)-center(1)) + center(2); % Basically using point-slope formula to keep the point on line
 end
 
 function mid = midpoint(pt1, pt2)
