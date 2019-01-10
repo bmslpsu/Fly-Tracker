@@ -1,5 +1,5 @@
-function [lCenterPos, rCenterPos, lMask, rMask,rtop, rbot, ltop, lbot] = MakeMask(vid)
-% MakeMask:
+function [lCenterPos, rCenterPos, lMask, rMask,rtop, rbot, ltop, lbot] = MakeWingMask(vid)
+% MakeWingMask:
 
     dim = size(vid);
     figure
