@@ -33,7 +33,7 @@ for jj = 1:nTrial
     
     % Save data
     disp('Save Data...')
-    save([dirpath 'Angles\' FILES{jj} ],'-v7.3','Wing');
+    save([dirpath 'WingAngles\' FILES{jj} ],'-v7.3','Wing');
     
 %     close all
 %     clc
