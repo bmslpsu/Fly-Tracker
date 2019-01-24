@@ -7,7 +7,7 @@ function [Wing] = WingTracker_Area(vid,debug,varargin)
     % OUTPUTS:
         % (1) Wing: structure containing time, L & R wing angles and mask points
         
-%% Area Tracking %% yyyyy
+%% Area Tracking %% yyyyyxxxx
 %---------------------------------------------------------------------------------------------------------------------------------
 % Make Mask
 Vid = squeeze(vid);         % get rid of singleton dimension
