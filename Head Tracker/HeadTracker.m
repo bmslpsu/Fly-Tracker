@@ -1,5 +1,5 @@
 function [hAngles,centerPoint] = HeadTracker(vidData,t_v,nPoints,playBack,debug)
-%% GetHeadAngle_V0: tracks feature on fly head (ususally antenna) & calculates the angle with respect to a specififed 
+%% HeadTracker: tracks feature on fly head (ususally antenna) & calculates the angle with respect to a specififed 
 % center point. Kanade–Lucas–Tomasi feature tracker.
 % Sign Convention for angle outputs:    CW = + and CCW = -
     % INPUTS:
