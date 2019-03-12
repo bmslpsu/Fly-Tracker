@@ -2,8 +2,8 @@
 %---------------------------------------------------------------------------------------------------------------------------------
 clear;close all;clc
 
-% root = 'H:\Experiment_HeadExcitation\Chirp\Normal\Vid\';
-root = 'H:\Experiment_HeadExcitation\Chirp_Linear_15\Vid\';
+root = 'H:\EXPERIMENTS\Experiment_Sinusoid\11.25\Vid\';
+
 [files, dirpath] = uigetfile({'*.mat', 'DAQ-files'}, ... % select video files
     'Select fly trials', root, 'MultiSelect','on');
 
@@ -27,7 +27,7 @@ for jj = 1:nTrial
     load([dirpath FILES{jj}]); % load video data
     disp('Load File: Done')
     
-    % Ret tracking parametrs
+    % Set tracking parametrs
     nPoints = 5;
     playBack = 10;
     debug = 1;
