@@ -2,8 +2,7 @@
 %---------------------------------------------------------------------------------------------------------------------------------
 clear;close all;clc
 
-% root = 'H:\Experiment_HeadExcitation\Chirp\Normal\Vid\';
-root = 'E:\Experiment_HeadExcitation\SOS\Vid\';
+root = 'W:\Research\Walking Chirp mat';
 [files, dirpath] = uigetfile({'*.mat', 'DAQ-files'}, ... % select video files
     'Select fly trials', root, 'MultiSelect','on');
 
@@ -20,23 +19,31 @@ clear files
 % Preallocate arrays to store files name data
 nTrial = length(FILES);     % total # of trials
 
+[D,~,~,~] = GetFileData(FILES);
+
 %% Load video data & run tracking software %%
 %---------------------------------------------------------------------------------------------------------------------------------
 for jj = 1:nTrial
     % Load video data
     load([dirpath FILES{jj}]); % load video data
     disp('Load File: Done')
+   
+    Vid_edit = zeros(size(Vid));
+    for x = 1:length(VidTime)
+        Vid_edit(:,:,x) = ImageProcess2(Vid(:,:,x));
+    end
+    
     
     % Ret tracking parametrs
-    nPoints = 4;
+    nPoints = 8;
     playBack = 15;
     debug = 1;
     
     % Run tracking
-    [hAngles] = HeadTracker(vidData,t_v,nPoints,playBack,debug);
+    [hAngles] = HeadTracker(Vid_edit,VidTime,nPoints,playBack,debug);
     
     % Filter head angles
-    Fs = 1/mean(diff(t_v)); % sampling rate [Hz]
+    Fs = 1/mean(diff(VidTime)); % sampling rate [Hz]
     Fc = 20; % cutoff frequency for head angles [Hz]
     [b, a] = butter(2, 15/(Fs/2),'low');  % filter design
     hAnglesFilt = filtfilt(b,a,hAngles);  % zero-phase filter for head angles [deg]
@@ -44,16 +51,16 @@ for jj = 1:nTrial
     % Display angles
     figure (1); clf ; hold on ; title('Head Angles: Press space to save')
         ylabel('deg') ; xlabel('time') ;
-        plot(t_v,hAngles,'b','LineWidth',2) % original data
-        plot(t_v,hAnglesFilt,'r','LineWidth',1) % filtered data
+        plot(VidTime,hAngles,'b','LineWidth',2) % original data
+        plot(VidTime,hAnglesFilt,'r','LineWidth',1) % filtered data
         grid on; grid minor ; box on
-        xlim([0 max(t_v)])
+        xlim([0 max(VidTime)])
         
   	pause
-
+t_v = VidTime;
     % Save data
     disp('Save Data...')
-    save([ dirpath 'Angles\' FILES{jj} ],'-v7.3','hAngles','t_v');
+    save([ dirpath 'Angles\' 'fly_' num2str(D{jj,1}) '_trial_' num2str(D{jj,2}) '_amp_' num2str(D{jj,3}) '.mat' ],'-v7.3','hAngles','t_v');
     
     close all
     clc

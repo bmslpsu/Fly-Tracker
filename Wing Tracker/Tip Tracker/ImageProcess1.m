@@ -20,3 +20,6 @@ SE.erode =  strel('disk',2,8); % shape to use for erode and dilate functions
 Vid_edit = IMG;
 end
 
+imbinarize
+bwareopen
+erode
