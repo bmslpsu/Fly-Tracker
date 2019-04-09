@@ -1,7 +1,7 @@
 %% Load Data
 
 clc, clear, close all
-load('fly_6_trial_23_freq_2.mat');
+% load('fly_6_trial_23_freq_2.mat');
 Vid = squeeze(vidData);
 %% Processing
 
