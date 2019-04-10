@@ -35,7 +35,7 @@ for jj = 1:nTrial
     
     
     % Ret tracking parametrs
-    nPoints = 8;
+    nPoints = 3;
     playBack = 15;
     debug = 1;
     
