@@ -3,7 +3,7 @@
 %---------------------------------------------------------------------------------------------------------------------------------
 clear;close all;clc
 
-root = 'H:\EXPERIMENTS\Experiment_Asymmetry_Control_Verification\HighContrast\0\Vid\';
+root = 'F:\EXPERIMENTS\Experiment_Asymmetry_Control_Verification\HighContrast\0\Vid\';
 
 [files, dirpath] = uigetfile({'*.mat', 'DAQ-files'}, ... % select video files
     'Select fly trials', root, 'MultiSelect','on');
@@ -25,12 +25,13 @@ for jj = 1:nTrial
     
     % Make Mask
 %     [Wing.Mask] = MakeWingMask(vidData);
+    close all
     
     % Run tracking
     tic
 %     [lAngles, rAngles] = curvedWingEdgeAnalyzer_V3(vidData, Wing.Mask.R.points, Wing.Mask.L.points, ...
 %         Wing.Mask.R.center, Wing.Mask.L.center, 0.25, debug);
-    [lAngles, rAngles, lCenterPos, rCenterPos, lMask, rMask] = curvedWingEdge(vidData, 0.3, debug, '');
+    [lAngles, rAngles, lCenterPos, rCenterPos, lMask, rMask] = curvedWingEdge(vidData, 0.35, debug, '');
     toc
     
     Wing.Time = t_v;
