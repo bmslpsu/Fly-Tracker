@@ -3,19 +3,13 @@
 clear;close all;clc
 
 % root = 'H:\Experiment_HeadExcitation\Chirp\Normal\Vid\';
-root = 'E:\Experiment_HeadExcitation\SOS\Vid\';
-[files, dirpath] = uigetfile({'*.mat', 'DAQ-files'}, ... % select video files
+root = 'F:\EXPERIMENTS\Experiment_SOS\Vid\';
+[FILES, dirpath] = uigetfile({'*.mat', 'DAQ-files'}, ... % select video files
     'Select fly trials', root, 'MultiSelect','on');
 
 %% Parse File Name Data %%
 %---------------------------------------------------------------------------------------------------------------------------------
-% Check how many files are loaded
-if ischar(files)
-    FILES{1} = files;
-else
-    FILES = files;
-end
-clear files
+FILES = cellstr(FILES)';
 
 % Preallocate arrays to store files name data
 nTrial = length(FILES);     % total # of trials
@@ -28,9 +22,9 @@ for jj = 1:nTrial
     disp('Load File: Done')
     
     % Ret tracking parametrs
-    nPoints = 4;
-    playBack = 15;
-    debug = 1;
+    nPoints = 6; 
+    playBack = 10;
+    debug = 1; 
     
     % Run tracking
     [hAngles] = HeadTracker(vidData,t_v,nPoints,playBack,debug);
