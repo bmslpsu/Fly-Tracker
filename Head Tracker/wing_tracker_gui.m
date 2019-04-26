@@ -22,7 +22,7 @@ function varargout = wing_tracker_gui(varargin)
 
 % Edit the above text to modify the response to help wing_tracker_gui
 
-% Last Modified by GUIDE v2.5 23-Apr-2019 17:06:56
+% Last Modified by GUIDE v2.5 23-Apr-2019 17:28:36
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -187,17 +187,14 @@ function Mask_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global vid
-global Threslow
-global debug
-global Head
 global objectRegion
 global centerpoint
 global Mask
+global nFrame
 vidData = squeeze(vid);
 [~,~,nFrame] = size(vidData); % get dimensions  of video data
 objectFrame = vidData(:,:,1); % get frame to start tracker
 displayFrame = vidData(:,:,1); % get frame for display
-figure (1); clf ; 
 imshow(displayFrame); title('Pick area of interest & draw head midline') % show frame
 objectRegion = round(getPosition(imrect)); % draw box around tracking point (antenna)
 centerpoint = round(getPosition(impoint));
@@ -282,13 +279,14 @@ function correct_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 global vid
 global Threslow
-global debug
 global Head
 global objectRegion
 global centerpoint
 global Mask
 global correction
 global IMG
+global nFrame
+global Rel_center
 Head = zeros(nFrame,1);
 Rel_center = centerpoint - [objectRegion(1),objectRegion(2)];
 column = objectRegion(4);
@@ -300,7 +298,6 @@ IMG{1} = vid(:,:,kk);
     IMG{1} = logical(IMG{1}); 
     Frame = IMG{1};
     Head(kk) = calculateAngle(Frame, Mask, Rel_center,column);
-     figure (1)
      imshow(IMG{1})
      hold on
      h.R = animatedline('Color','r','LineWidth',2);
@@ -309,3 +306,38 @@ IMG{1} = vid(:,:,kk);
     correct = round(getPosition(impoint));
     correct_angle = atan2((correct(2)-centerpoint(2)),(correct(1)-centerpoint(1)));
     correction = Head(kk)-correct_angle;
+
+
+% --- Executes on button press in start.
+function start_Callback(hObject, eventdata, handles)
+% hObject    handle to start (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global vid
+global Threslow
+global Head
+global centerpoint
+global Mask
+global correction
+global IMG
+global nFrame
+global Rel_center
+global objectRegion
+global debug
+for kk = 1:nFrame   
+    IMG{1} = vid(:,:,kk);
+    thresh.Idx = (IMG{1} >=Threslow);
+    IMG{1}(thresh.Idx) = 1;                 
+    IMG{1}(~thresh.Idx) = 0;
+    IMG{1} = logical(IMG{1}); 
+    Frame = IMG{1};
+    column = objectRegion(4);
+    Head(kk) = calculateAngle2(Frame, Mask, Rel_center,column,correction);
+    if debug
+     imshow(IMG{1})
+     hold on
+     h.R = animatedline('Color','r','LineWidth',2);
+     addpoints(h.R , centerpoint(1),centerpoint(2));
+     addpoints(h.R , centerpoint(1)+100*cos(Head(kk)),centerpoint(2)+sin(Head(kk))*100);
+    end
+end

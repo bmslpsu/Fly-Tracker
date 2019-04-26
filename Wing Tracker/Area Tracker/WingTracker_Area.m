@@ -1,4 +1,4 @@
-function [Wing] = WingTracker_Area(vid,debug,Threslow,filter,varargin)
+function [Wing] = WingTracker_Area(vid,debug,Threslow,filter)
 % WingTracker: tracks wings in rigid teher
     % INPUTS:
         % (1) vid   : 4D video matrix
