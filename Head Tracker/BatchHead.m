@@ -2,17 +2,13 @@
 %---------------------------------------------------------------------------------------------------------------------------------
 clear;close all;clc
 
-% root = 'H:\Experiment_HeadExcitation\Chirp\Normal\Vid\';
-root = 'F:\EXPERIMENTS\Experiment_SOS\Vid\';
+root = 'F:\EXPERIMENTS\Experiment_Asymmetry_Control_Verification\HighContrast\0\Vid\';
 [FILES, dirpath] = uigetfile({'*.mat', 'DAQ-files'}, ... % select video files
     'Select fly trials', root, 'MultiSelect','on');
 
-%% Parse File Name Data %%
-%---------------------------------------------------------------------------------------------------------------------------------
 FILES = cellstr(FILES)';
 
-% Preallocate arrays to store files name data
-nTrial = length(FILES);     % total # of trials
+nTrial = length(FILES); % total # of trials
 
 %% Load video data & run tracking software %%
 %---------------------------------------------------------------------------------------------------------------------------------
@@ -22,12 +18,12 @@ for jj = 1:nTrial
     disp('Load File: Done')
     
     % Ret tracking parametrs
-    nPoints = 6; 
+    nPoints = 5; 
     playBack = 10;
     debug = 1; 
     
     % Run tracking
-    [hAngles] = HeadTracker(vidData,t_v,nPoints,playBack,debug);
+    [hAngles,hCenter] = HeadTracker(vidData,t_v,nPoints,playBack,debug);
     
     % Filter head angles
     Fs = 1/mean(diff(t_v)); % sampling rate [Hz]
@@ -47,7 +43,7 @@ for jj = 1:nTrial
 
     % Save data
     disp('Save Data...')
-    save([ dirpath 'Angles\' FILES{jj} ],'-v7.3','hAngles','t_v');
+    save([ dirpath 'HeadAngles\' FILES{jj} ],'-v7.3','hAngles','t_v','hCenter');
     
     close all
     clc
