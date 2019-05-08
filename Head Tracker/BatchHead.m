@@ -2,7 +2,8 @@
 %---------------------------------------------------------------------------------------------------------------------------------
 clear;close all;clc
 
-root = 'F:\EXPERIMENTS\Experiment_Asymmetry_Control_Verification\HighContrast\0\Vid\';
+% root = 'F:\EXPERIMENTS\Experiment_Asymmetry_Control_Verification\HighContrast\0\Vid\';
+root = 'F:\EXPERIMENTS\Experiment_SOS\Vid';
 [FILES, dirpath] = uigetfile({'*.mat', 'DAQ-files'}, ... % select video files
     'Select fly trials', root, 'MultiSelect','on');
 
@@ -17,8 +18,8 @@ for jj = 1:nTrial
     load([dirpath FILES{jj}]); % load video data
     disp('Load File: Done')
     
-    % Ret tracking parametrs
-    nPoints = 5; 
+    % Set tracking parametrs
+    nPoints = 2; 
     playBack = 10;
     debug = 1; 
     
@@ -32,7 +33,7 @@ for jj = 1:nTrial
     hAnglesFilt = filtfilt(b,a,hAngles);  % zero-phase filter for head angles [deg]
     
     % Display angles
-    figure (1); clf ; hold on ; title('Head Angles: Press space to save')
+    figure (2); clf ; hold on ; title('Head Angles: Press space to save')
         ylabel('deg') ; xlabel('time') ;
         plot(t_v,hAngles,'b','LineWidth',2) % original data
         plot(t_v,hAnglesFilt,'r','LineWidth',1) % filtered data
@@ -43,7 +44,7 @@ for jj = 1:nTrial
 
     % Save data
     disp('Save Data...')
-    save([ dirpath 'HeadAngles\' FILES{jj} ],'-v7.3','hAngles','t_v','hCenter');
+    save(fullfile(dirpath,'Angles\',FILES{jj}),'-v7.3','hAngles','t_v','hCenter');
     
     close all
     clc

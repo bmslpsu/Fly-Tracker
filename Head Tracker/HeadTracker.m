@@ -128,6 +128,7 @@ end
 
 % pause
 if playBack
-    close (hWait) ; close (h1) ; close (h2) % close waitbar & figure window
+    close (hWait) ; 
+%     close (h1) ; close (h2) % close waitbar & figure window
 end
 end
