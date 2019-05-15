@@ -3,7 +3,8 @@
 clear;close all;clc
 
 % root = 'F:\EXPERIMENTS\Experiment_Asymmetry_Control_Verification\HighContrast\0\Vid\';
-root = 'F:\EXPERIMENTS\Experiment_SOS\Vid';
+% root = 'F:\EXPERIMENTS\Experiment_SOS\Vid';
+root = 'F:\EXPERIMENTS\Experiment_Static_SpatFreq\Vid';
 [FILES, dirpath] = uigetfile({'*.mat', 'DAQ-files'}, ... % select video files
     'Select fly trials', root, 'MultiSelect','on');
 
@@ -19,7 +20,7 @@ for jj = 1:nTrial
     disp('Load File: Done')
     
     % Set tracking parametrs
-    nPoints = 2; 
+    nPoints = 4; 
     playBack = 10;
     debug = 1; 
     
@@ -44,7 +45,7 @@ for jj = 1:nTrial
 
     % Save data
     disp('Save Data...')
-    save(fullfile(dirpath,'Angles\',FILES{jj}),'-v7.3','hAngles','t_v','hCenter');
+    save(fullfile(dirpath,'HeadAngles\',FILES{jj}),'-v7.3','hAngles','t_v','hCenter');
     
     close all
     clc
