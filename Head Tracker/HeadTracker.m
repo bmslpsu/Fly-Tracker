@@ -118,7 +118,7 @@ if playBack
 
             line([centerPoint.X ,  Pos.X(kk) - (initFeat.X - midPoint.X)],...  % update line drawn to head mideline
                  [centerPoint.Y ,  Pos.Y(kk) - (initFeat.Y - midPoint.Y)],...
-                 'Color','r','LineWidth',2,'Marker','o')
+                 'Color','r','LineWidth',2,'Marker','.')
              
         figure (2)
             addpoints(hAnglePlot,t_v(kk),hAngles(kk)) % update line
