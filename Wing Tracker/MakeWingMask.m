@@ -100,13 +100,13 @@ function [Mask] = MakeWingMask(vid)
 
     [ii,jj]         = find(Mask.R.mask);
     Mask.R.ang      = atan2d(ii-Mask.R.center(2),jj-Mask.R.center(1));
-   	Mask.R.sub      = Mask.R.ang>-20;
+   	Mask.R.sub      = Mask.R.ang>-30;
     Mask.R.ang      = Mask.R.ang(Mask.R.sub);
 
     [ii,jj]         = find(Mask.L.mask);
     Mask.L.ang      = atan2d(ii-Mask.L.center(2),jj-Mask.L.center(1));
     Mask.L.ang(Mask.L.ang<0) = Mask.L.ang(Mask.L.ang<0) + 360;
-  	Mask.L.sub      = Mask.L.ang<210;
+  	Mask.L.sub      = Mask.L.ang<250;
     Mask.L.ang      = Mask.L.ang(Mask.L.sub);
 end
 %% Function for correcting angles for the left side when they're below the horizontal
