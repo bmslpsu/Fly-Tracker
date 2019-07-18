@@ -1,10 +1,11 @@
-function [WingMask] = MakeWingMask(vid)
+function [Mask] = MakeWingMask(vid)
 % MakeWingMask:
-    Vid = squeeze(vid);
+    Vid = flipud(squeeze(vid));
     dim = size(Vid);
-    figure
+    FIG = figure;
+    ax = gca;
     imagesc(Vid(:,:,1));                                
-    axis equal
+    axis equal xy off
     xlim([0 dim(2)])
     ylim([0 dim(1)])
        
@@ -80,18 +81,33 @@ function [WingMask] = MakeWingMask(vid)
     btnDone.Value = 0;
     
     % Make strcture containing mask points
-    WingMask.R.center   = getPosition(rPts(4));
-    WingMask.L.center   = getPosition(lPts(4));
+    Mask.R.center   = getPosition(rPts(4));
+    Mask.L.center   = getPosition(lPts(4));
     
-    WingMask.R.points   = rMaskPts(rPts);
-    WingMask.L.points   = lMaskPts(lPts);
+    Mask.R.points   = rMaskPts(rPts);
+    Mask.L.points   = lMaskPts(lPts);
     
-    WingMask.R.top      = getPosition(rPts(1));
- 	WingMask.L.top   	= getPosition(lPts(1));
+    Mask.R.top      = getPosition(rPts(1));
+ 	Mask.L.top   	= getPosition(lPts(1));
 
-    WingMask.R.bot      = getPosition(rPts(2));
-    WingMask.L.bot    	= getPosition(lPts(2));
+    Mask.R.bot      = getPosition(rPts(2));
+    Mask.L.bot    	= getPosition(lPts(2));
+    
+    Mask.R.poly     = impoly(gca, Mask.R.points);
+    Mask.L.poly     = impoly(gca, Mask.L.points);
+    Mask.R.mask     = createMask(Mask.R.poly);
+    Mask.L.mask     = createMask(Mask.L.poly);
 
+    [ii,jj]         = find(Mask.R.mask);
+    Mask.R.ang      = atan2d(ii-Mask.R.center(2),jj-Mask.R.center(1));
+   	Mask.R.sub      = Mask.R.ang>-20;
+    Mask.R.ang      = Mask.R.ang(Mask.R.sub);
+
+    [ii,jj]         = find(Mask.L.mask);
+    Mask.L.ang      = atan2d(ii-Mask.L.center(2),jj-Mask.L.center(1));
+    Mask.L.ang(Mask.L.ang<0) = Mask.L.ang(Mask.L.ang<0) + 360;
+  	Mask.L.sub      = Mask.L.ang<210;
+    Mask.L.ang      = Mask.L.ang(Mask.L.sub);
 end
 %% Function for correcting angles for the left side when they're below the horizontal
 function angle = correctLeftAngle(angle)
