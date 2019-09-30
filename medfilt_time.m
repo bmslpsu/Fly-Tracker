@@ -11,5 +11,5 @@ dim = size(A);
 B = reshape(A,[dim(1)*dim(2) dim(3)]);
 C = medfilt1(single(B),n,[],2);
 D = C/max(C(:));
-VID = reshape(D,dim);
+VID = uint8(reshape(D,dim));
 end
